@@ -19,7 +19,7 @@ resource "aws_internet_gateway" "gw" {
 
 # Create public subnet AZ1
 resource "aws_subnet" "public_subnet_az_1" {
-  vpc_id     = aws_vpc.jegbu_vpc
+  vpc_id     = aws_vpc.jegbu_vpc.id
   cidr_block = "10.0.1.0/24"
 
   tags = {
