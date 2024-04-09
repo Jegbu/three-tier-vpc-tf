@@ -4,6 +4,6 @@ resource "aws_vpc" "jegbu_vpc" {
   instance_tenancy = "default"
 
   tags = {
-    Name = "main"
+    Name = "jegbu_vpc"
   }
 }
