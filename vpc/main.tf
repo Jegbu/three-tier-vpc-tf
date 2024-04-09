@@ -8,7 +8,7 @@ resource "aws_vpc" "jegbu_vpc" {
   }
 }
 
-# Create internet gateway resource
+# Create internet gateway resource attached to VPC
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.jegbu_vpc.id
 
