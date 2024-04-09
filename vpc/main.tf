@@ -49,3 +49,14 @@ resource "aws_subnet" "private_subnet_az_1" {
     Name = "Private Subnet AZ1"
   }
 }
+
+# Create private subnet AZ2
+resource "aws_subnet" "private_subnet_az_2" {
+  vpc_id     = aws_vpc.jegbu_vpc.id
+  cidr_block = "10.0.4.0/24"
+  availability_zone = "us-east-1b"
+
+  tags = {
+    Name = "Private Subnet AZ2"
+  }
+}
