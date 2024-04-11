@@ -69,7 +69,7 @@ resource "aws_network_acl" "NACL_1" {
     protocol   = "tcp"
     rule_no    = 200
     action     = "allow"
-    cidr_block = "0.0.0.0/0"
+    cidr_block = "10.0.1.0/24"
     from_port  = 443
     to_port    = 443
   }
@@ -78,7 +78,7 @@ resource "aws_network_acl" "NACL_1" {
     protocol   = "tcp"
     rule_no    = 100
     action     = "allow"
-    cidr_block = "0.0.0.0/0"
+    cidr_block = "10.0.1.0/24"
     from_port  = 80
     to_port    = 80
   }
