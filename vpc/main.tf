@@ -60,3 +60,30 @@ resource "aws_subnet" "private_subnet_az_2" {
     Name = "Private Subnet AZ2"
   }
 }
+
+#NACL for public subnet AZ 1
+resource "aws_network_acl" "NACL_1" {
+  vpc_id = aws_vpc.jegbu_vpc.id
+
+  egress {
+    protocol   = "tcp"
+    rule_no    = 200
+    action     = "allow"
+    cidr_block = "10.0.1.0/24"
+    from_port  = 443
+    to_port    = 443
+  }
+
+  ingress {
+    protocol   = "tcp"
+    rule_no    = 100
+    action     = "allow"
+    cidr_block = "10.0.1.0/24"
+    from_port  = 80
+    to_port    = 80
+  }
+
+  tags = {
+    Name = "AZ 1 NACL"
+  }
+}
