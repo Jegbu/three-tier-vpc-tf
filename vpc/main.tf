@@ -116,7 +116,7 @@ resource "aws_network_acl" "NACL_2" {
 }
 
 # Route Table creation
-resource "aws_route_table" "example" {
+resource "aws_route_table" "Jegbu" {
   vpc_id = aws_vpc.jegbu_vpc.id
 
   route {
