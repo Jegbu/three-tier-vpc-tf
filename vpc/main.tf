@@ -143,7 +143,7 @@ resource "aws_network_acl" "NACL_private_1" {
 }
 
 #NACL for Private Subnet AZ 2
-resource "aws_network_acl" "NACL_private_1" {
+resource "aws_network_acl" "NACL_private_2" {
   vpc_id = aws_vpc.jegbu_vpc.id
 
   egress {
