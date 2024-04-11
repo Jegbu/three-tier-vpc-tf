@@ -138,7 +138,7 @@ resource "aws_network_acl" "NACL_private_1" {
   }
 
   tags = {
-    Name = "AZ 2 NACL"
+    Name = "Private NACL AZ 1"
   }
 }
 # Route Table creation
