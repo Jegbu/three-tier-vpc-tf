@@ -127,3 +127,9 @@ resource "aws_route_table" "Jegbu" {
     Name = "Jegbu Route Table"
   }
 }
+
+# Associate Public Subnet AZ 1 to Route Table
+resource "aws_route_table_association" "public_subnet_az_1" {
+  subnet_id      = aws_subnet.public_subnet_az_1.id
+  route_table_id = aws_route_table.Jegbu.id
+}
