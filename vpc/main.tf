@@ -114,3 +114,16 @@ resource "aws_network_acl" "NACL_2" {
     Name = "AZ 2 NACL"
   }
 }
+
+# Route Table creation
+resource "aws_route_table" "example" {
+  vpc_id = aws_vpc.jegbu_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.gw.id
+  }
+  tags = {
+    Name = "Jegbu Route Table"
+  }
+}
