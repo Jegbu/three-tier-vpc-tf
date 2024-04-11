@@ -205,3 +205,9 @@ resource "aws_network_acl_association" "NACL_2" {
   network_acl_id = aws_network_acl.NACL_2.id
   subnet_id      = aws_subnet.public_subnet_az_2.id
 }
+
+# Associate Private Subnet 1 to Private NACL 1
+resource "aws_network_acl_association" "Private_NACL_1" {
+  network_acl_id = aws_network_acl.NACL_private_1.id
+  subnet_id      = aws_subnet.private_subnet_az_1.id
+}
