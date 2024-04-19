@@ -2,6 +2,7 @@
 resource "aws_vpc" "jegbu_vpc" {
   cidr_block       = "10.0.0.0/16"
   instance_tenancy = "default"
+  enable_dns_hostnames = true
 
   tags = {
     Name = "jegbu_vpc"
@@ -61,114 +62,6 @@ resource "aws_subnet" "private_subnet_az_2" {
   }
 }
 
-#NACL for public subnet AZ 1
-resource "aws_network_acl" "NACL_1" {
-  vpc_id = aws_vpc.jegbu_vpc.id
-
-  egress {
-    protocol   = "tcp"
-    rule_no    = 200
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 443
-    to_port    = 443
-  }
-
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 100
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 80
-    to_port    = 80
-  }
-
-  tags = {
-    Name = "AZ 1 NACL"
-  }
-}
-
-#NACL for public subnet AZ 2
-resource "aws_network_acl" "NACL_2" {
-  vpc_id = aws_vpc.jegbu_vpc.id
-
-  egress {
-    protocol   = "tcp"
-    rule_no    = 200
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 443
-    to_port    = 443
-  }
-
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 100
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 80
-    to_port    = 80
-  }
-
-  tags = {
-    Name = "AZ 2 NACL"
-  }
-}
-
-#NACL for Private Subnet AZ 1
-resource "aws_network_acl" "NACL_private_1" {
-  vpc_id = aws_vpc.jegbu_vpc.id
-
-  egress {
-    protocol   = "tcp"
-    rule_no    = 200
-    action     = "allow"
-    cidr_block = "10.0.3.0/24"
-    from_port  = 443
-    to_port    = 443
-  }
-
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 100
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 80
-    to_port    = 80
-  }
-
-  tags = {
-    Name = "Private NACL AZ 1"
-  }
-}
-
-#NACL for Private Subnet AZ 2
-resource "aws_network_acl" "NACL_private_2" {
-  vpc_id = aws_vpc.jegbu_vpc.id
-
-  egress {
-    protocol   = "tcp"
-    rule_no    = 200
-    action     = "allow"
-    cidr_block = "10.0.4.0/24"
-    from_port  = 443
-    to_port    = 443
-  }
-
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 100
-    action     = "allow"
-    cidr_block = "0.0.0.0/0"
-    from_port  = 80
-    to_port    = 80
-  }
-
-  tags = {
-    Name = "Private NACL AZ 2"
-  }
-}
-
 # Route Table creation
 resource "aws_route_table" "Jegbu" {
   vpc_id = aws_vpc.jegbu_vpc.id
@@ -194,26 +87,49 @@ resource "aws_route_table_association" "public_subnet_az_2" {
   route_table_id = aws_route_table.Jegbu.id
 }
 
-# Associate Public Subnet 1 to NACL 1
-resource "aws_network_acl_association" "NACL_1" {
-  network_acl_id = aws_network_acl.NACL_1.id
-  subnet_id      = aws_subnet.public_subnet_az_1.id
+provider "aws" {
+  region = "us-east-1"
 }
 
-# Associate Public Subnet 2 to NACL 2
-resource "aws_network_acl_association" "NACL_2" {
-  network_acl_id = aws_network_acl.NACL_2.id
-  subnet_id      = aws_subnet.public_subnet_az_2.id
+resource "aws_security_group" "example" {
+  vpc_id      = aws_vpc.jegbu_vpc.id
+  name        = "jegbu_security_group"
+  description = "Example security group"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "Jegbu Security Group"
+  }
 }
 
-# Associate Private Subnet 1 to Private NACL 1
-resource "aws_network_acl_association" "Private_NACL_1" {
-  network_acl_id = aws_network_acl.NACL_private_1.id
-  subnet_id      = aws_subnet.private_subnet_az_1.id
-}
-
-# Associate Private Subnet 2 to Private NACL 2
-resource "aws_network_acl_association" "Private_NACL_2" {
-  network_acl_id = aws_network_acl.NACL_private_2.id
-  subnet_id      = aws_subnet.private_subnet_az_2.id
+output "security_group_id" {
+  description = "The ID of the security group"
+  value       = aws_security_group.example.id
 }
