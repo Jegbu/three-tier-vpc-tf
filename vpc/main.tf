@@ -87,6 +87,8 @@ resource "aws_route_table_association" "public_subnet_az_2" {
   route_table_id = aws_route_table.Jegbu.id
 }
 
+
+# Create Security Group
 provider "aws" {
   region = "us-east-1"
 }
